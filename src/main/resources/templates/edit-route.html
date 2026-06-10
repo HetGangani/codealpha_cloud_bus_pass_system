@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Route</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+
+            <a class="navbar-brand fw-bold" href="/view-passes"> 🚌 Cloud Bus Pass System </a>
+            <div>
+                <a href="/view-passes" class="btn btn-outline-light me-2"> Dashboard </a>
+                <a href="/routes" class="btn btn-outline-light me-2"> Routes </a>
+                <a href="/logout" class="btn btn-outline-danger"> Logout </a>
+            </div>
+        </div>
+    </nav>
+
+<div class="container mt-5">
+    <div class="card shadow">
+
+        <div class="card-header bg-warning">
+            Edit Route
+        </div>
+
+        <div class="card-body">
+            <form action="/update-route" method="post">
+
+                <input type="hidden" name="id" th:value="${route.id}">
+
+                <div class="mb-3">
+                    <label>Route Name</label>
+                    <input type="text" name="routeName" class="form-control" th:value="${route.routeName}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Source</label>
+                    <input type="text" name="source" class="form-control" th:value="${route.source}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Destination</label>
+                    <input type="text" name="destination" class="form-control" th:value="${route.destination}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label> Fare (₹)</label>
+                    <input type="number" step="0.01" name="fare" class="form-control" th:value="${route.fare}" required>
+                </div>
+
+                <button class="btn btn-outline-success"> Update Route </button>
+                <a href="/routes" class="btn btn-outline-secondary"> Cancel </a>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

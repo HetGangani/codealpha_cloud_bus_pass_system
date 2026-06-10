@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+
+            <a class="navbar-brand fw-bold" href="/student-dashboard"> 🚌 Cloud Bus Pass System </a>
+            <div>
+                <a href="/student-dashboard" class="btn btn-outline-light me-2"> Dashboard </a>
+                <a href="/apply-pass" class="btn btn-outline-light me-2"> Apply Pass </a>
+                <a href="/profile" class="btn btn-outline-light me-2"> Profile </a>
+                <a href="/student-dashboard" class="btn btn-outline-light me-2"></a>
+                <a href="/logout" class="btn btn-outline-danger"> Logout </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5" style="max-width: 900px;">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                Student Profile
+            </div>
+            <div class="card-body">
+                <h5>Name:</h5>
+                <p th:text="${user.fullName}"></p>
+
+                <h5>Email:</h5>
+                <p th:text="${user.email}"></p>
+
+                <h5>Role:</h5>
+                <p th:text="${user.role}"></p>
+
+                <a href="/change-password" class="btn btn-outline-warning"> Change Password </a>
+                <a href="/student-dashboard" class="btn btn-outline-secondary"> Back </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

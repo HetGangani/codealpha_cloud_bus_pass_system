@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+
+            <a class="navbar-brand fw-bold" href="/student-dashboard"> 🚌 Cloud Bus Pass System </a>
+            <div>
+                <a href="/student-dashboard" class="btn btn-outline-light me-2"> Dashboard </a>
+                <a href="/apply-pass" class="btn btn-outline-light me-2"> Apply Pass </a>
+                <a href="/profile" class="btn btn-outline-light me-2"><i class="bi bi-person-circle"></i> Profile </a>
+                <a href="/logout" class="btn btn-outline-danger"><i class="bi bi-box-arrow-right"></i> Logout </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="card shadow">
+
+            <div class="card-header bg-primary text-white">
+                <h2> Welcome, <span th:text="${loggedInUser.fullName}"></span> </h2>
+            </div>
+
+            <div class="row mt-4">
+
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white text-center shadow">
+                        <div class="card-body">
+                            <h5>
+                                <i class="bi bi-file-earmark-text"></i>
+                                Total Applications
+                            </h5>
+                            <h2 th:text="${totalApplications}"></h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card bg-success text-white text-center shadow">
+                        <div class="card-body">
+                            <h5>
+                                <i class="bi bi-check-circle-fill"></i>
+                                Approved
+                            </h5>
+                            <h2 th:text="${approvedCount}"></h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white text-center shadow">
+                        <div class="card-body">
+                            <h5>
+                                <i class="bi bi-clock-history"></i>
+                                Pending
+                            </h5>
+                            <h2 th:text="${pendingCount}"></h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card bg-danger text-white text-center shadow">
+                        <div class="card-body">
+                            <h5>
+                                <i class="bi bi-x-circle-fill"></i>
+                                Rejected
+                            </h5>
+                            <h2 th:text="${rejectedCount}"></h2>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card-body">
+                <a th:if="${pass == null || pass.status == 'Rejected'}" href="/apply-pass" class="btn btn-outline-success"><i class="bi bi-bus-front"></i> Apply Bus Pass </a>
+                <a href="/logout" class="btn btn-outline-danger"> Logout </a>
+            </div>
+
+            <div class="card mt-4 shadow">
+                <div class="card-header bg-dark text-white">
+                    My Applications
+                </div>
+
+                <div class="card-body text-center">
+                    <div style="width:300px;height:300px;margin:auto;">
+                        <canvas id="studentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${pass == null}" class="alert alert-info mt-4">
+                No bus pass application found.
+            </div>
+
+            <div th:if="${pass != null}" class="card mt-4 shadow border-0">
+                <div class="card-header bg-success text-white">
+                    <h4> <i class="bi bi-file-earmark-check"></i> Latest Application </h4>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>
+                                <strong> <i class="bi bi-bus-front"></i> Route: </strong>
+                                <span th:text="${pass.routeName}"></span>
+                            </p>
+
+                            <p>
+                                <strong> <i class="bi bi-geo-alt"></i> Source:</strong>
+                                <span th:text="${pass.sourceStop}"></span>
+                            </p>
+
+                            <p>
+                                <strong> <i class="bi bi-geo"></i> Destination: </strong>
+                                <span th:text="${pass.destinationStop}"></span>
+                            </p>
+
+                            <p>
+                                <strong> <i class="bi bi-currency-rupee"></i> Fare: </strong>
+                                ₹ <span th:text="${pass.fare}"></span>
+                            </p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <p>
+                                <strong>Status:</strong>
+                                <span th:if="${pass.status == 'Approved'}" class="badge bg-success"> Approved </span>
+                                <span th:if="${pass.status == 'Pending'}" class="badge bg-warning text-dark"> Pending </span>
+                                <span th:if="${pass.status == 'Rejected'}" class="badge bg-danger"> Rejected </span>
+                            </p>
+
+                            <p>
+                                <strong> <i class="bi bi-calendar-event"></i> Applied On: </strong>
+                                <span th:text="${#temporals.format(pass.appliedDate,'dd-MM-yyyy HH:mm')}"></span>
+                            </p>
+
+                            <div th:if="${pass.status == 'Approved'}">
+                                <a th:href="@{/download-pass/{id}(id=${pass.id})}"
+                                   class="btn btn-primary"> <i class="bi bi-download"></i> Download Pass </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-4 shadow">
+                <div class="card-header bg-dark text-white">
+                    My Application History
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Route</th>
+                            <th>Status</th>
+                            <th>Applied Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="app : ${applications}">
+                            <td th:text="${app.id}"></td>
+                            <td th:text="${app.routeName}"></td>
+                            <td>
+                                <span th:if="${app.status == 'Approved'}" class="badge bg-success"> Approved </span>
+                                <span th:if="${app.status == 'Pending'}" class="badge bg-warning text-dark"> Pending </span>
+                                <span th:if="${app.status == 'Rejected'}" class="badge bg-danger"> Rejected </span>
+                            </td>
+                            <td th:text="${#temporals.format(app.appliedDate,'dd-MM-yyyy HH:mm')}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <input type="hidden" id="approvedCount" th:value="${approvedCount}">
+    <input type="hidden" id="pendingCount" th:value="${pendingCount}">
+    <input type="hidden" id="rejectedCount" th:value="${rejectedCount}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/student.js"></script>
+</body>
+</html>
